@@ -1,5 +1,7 @@
 # Kitchen Ordering App(Android)
 
+![Test image]("https://github.com/ymatinfard/KitchenOrdering/blob/master/app/src/main/res/drawable/kitchenOrdering_screen_shot.png")
+
 ## Overview
 
 This is a sample Android mobile application project that:
@@ -73,7 +75,6 @@ interface OrderDao {
 
 ## [View] Apply UI changes with RecyclerView 
 
-To obtain the best possible user experience while dealing with product list, I used Recycler View.
 
 ```kotlin
  ```
