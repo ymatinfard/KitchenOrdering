@@ -1,6 +1,6 @@
 # Kitchen Ordering App(Android)
 
-![Test image]("https://github.com/ymatinfard/KitchenOrdering/blob/master/app/src/main/res/drawable/kitchenOrdering_screen_shot.png")
+![Test image](https://github.com/ymatinfard/KitchenOrdering/blob/master/app/src/main/res/drawable/kitchenOrdering_screen_shot.png)
 
 ## Overview
 
