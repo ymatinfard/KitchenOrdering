@@ -15,13 +15,17 @@ import com.matinfard.kitchenordering.utils.showErrorMessage
 import com.matinfard.kitchenordering.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Login page. User needs to enter a valid username and password to log in. Username should be in an email format, otherwise log-in would fail.
  */
 class LoginFragment : Fragment() {
 
-    private val viewModel by viewModels<LoginViewModel> { getViewModelFactory(requireActivity()) }
+ //   private val viewModel by viewModels<LoginViewModel> { getViewModelFactory(requireActivity()) }
+    private val viewModel : LoginViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,

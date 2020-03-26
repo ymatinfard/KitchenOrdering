@@ -10,8 +10,10 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.matinfard.kitchenordering.R
-import com.matinfard.kitchenordering.utils.getViewModelFactory
 import com.matinfard.kitchenordering.viewmodel.SplashScreenViewModel
+import org.koin.android.ext.android.inject
+
+
 
 /**
  * Shows company logo for 2 seconds and redirects user to login or dashboard page based on user login data. If user already has
@@ -19,7 +21,8 @@ import com.matinfard.kitchenordering.viewmodel.SplashScreenViewModel
  */
 class SplashScreenFragment: Fragment() {
 
-    private val viewModel by viewModels<SplashScreenViewModel> { getViewModelFactory(requireActivity()) }
+  //  private val viewModel by viewModels<SplashScreenViewModel> { getViewModelFactory(requireActivity()) }
+    private val viewModel: SplashScreenViewModel by inject()
     private lateinit var navController: NavController
 
     override fun onCreateView(

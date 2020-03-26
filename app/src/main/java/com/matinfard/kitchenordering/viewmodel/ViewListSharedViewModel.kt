@@ -1,6 +1,7 @@
 package com.matinfard.kitchenordering.viewmodel
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import androidx.lifecycle.*
 import com.matinfard.kitchenordering.R
 import com.matinfard.kitchenordering.data.Repository
@@ -10,6 +11,8 @@ import com.matinfard.kitchenordering.model.Product
 import com.matinfard.kitchenordering.utils.SharedPrefToken
 import com.matinfard.kitchenordering.utils.SingleLiveEvent
 import kotlinx.coroutines.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,8 +20,8 @@ import java.util.*
 /**
  * Shared viewmodel among "order, orderItems, viewList" fragments.
  */
-class ViewListSharedViewModel(private val context: Context, private val repository: Repository) :
-    ViewModel() {
+class ViewListSharedViewModel(private val repository: Repository) :
+    ViewModel(), KoinComponent {
 
     private val orderSavedNavigate = SingleLiveEvent<Boolean>()
 
@@ -36,7 +39,8 @@ class ViewListSharedViewModel(private val context: Context, private val reposito
 
     private var _orderIdLiveData = MutableLiveData<Int>()
 
-    private var sharedPrefToken = SharedPrefToken(context)
+ //   private var sharedPrefToken = SharedPrefToken(context)
+    private val sharedPrefToken: SharedPrefToken by inject()
     private var orderListTemp = mutableListOf<Product>()
     private var productListResult: List<Product>? = emptyList()
 
@@ -85,7 +89,7 @@ class ViewListSharedViewModel(private val context: Context, private val reposito
             orderListTemp.add(newOrder)
             _ordersCountTmp.value = orderListTemp.size.also { Timber.d(it.toString()) }
         } else {
-            _userMessage.value = context.getString(R.string.product_already_added)
+            _userMessage.value = "You already added this product!"
         }
     }
 
@@ -116,7 +120,7 @@ class ViewListSharedViewModel(private val context: Context, private val reposito
                     _ordersCountTmp.postValue(0) }
             }
         } else {
-            _userMessage.value = context.getString(R.string.select_item_user_msg)
+            _userMessage.value = "Please select an Item to make an Order!"
         }
     }
 

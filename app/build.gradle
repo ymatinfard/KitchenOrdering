@@ -137,6 +137,10 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
-
+    // Koin for Kotlin
+    implementation "org.koin:koin-core:$koinVersion"
+    implementation "org.koin:koin-android-ext:$koinVersion"
+    implementation "org.koin:koin-android-scope:$koinVersion"
+    implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
 }

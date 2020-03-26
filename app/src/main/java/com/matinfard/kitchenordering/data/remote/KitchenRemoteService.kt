@@ -8,6 +8,8 @@ import com.matinfard.kitchenordering.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
@@ -16,13 +18,9 @@ import java.lang.Exception
 /**
  * Handles all remote api calls. It returns "null" if remote call is not successful.
  */
-class KitchenRemoteService: RemoteDataSource {
+class KitchenRemoteService: RemoteDataSource, KoinComponent {
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .client(OkHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit: Retrofit by inject()
 
     private val kitchenService = retrofit.create(KitchenApi::class.java)
 

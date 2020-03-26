@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_dashboard.view.*
  */
 class DashboardFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

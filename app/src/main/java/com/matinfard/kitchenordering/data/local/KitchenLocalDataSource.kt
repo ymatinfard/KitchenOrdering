@@ -7,33 +7,33 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
-class KitchenLocalDataSource(private val orderDao: OrderDao) : LocalDataSource {
+class KitchenLocalDataSource(private val orderDataBase: OrderDataBase) : LocalDataSource {
     override suspend fun getAllOrderItems(orderId: Int): List<OrderItemsEntity> =
         withContext(Dispatchers.IO) {
-            return@withContext orderDao.getAllOrderItems(orderId)
+            return@withContext orderDataBase.orderDao().getAllOrderItems(orderId)
         }
 
     override fun getAllOrders(): LiveData<List<OrderEntity>> {
-        return orderDao.getAllOrders()
+        return orderDataBase.orderDao().getAllOrders()
     }
 
     override suspend fun insertOrderItems(orderItems: List<OrderItemsEntity>) =
         withContext(Dispatchers.IO) {
-            orderDao.insertOrderItems(orderItems)
+            orderDataBase.orderDao().insertOrderItems(orderItems)
         }
 
     override suspend fun insertOrder(order: OrderEntity) = withContext(Dispatchers.IO) {
-        orderDao.insertOrder(order)
+        orderDataBase.orderDao().insertOrder(order)
     }
 
     override suspend fun getTotalPrice(orderId: Int): Int = withContext(Dispatchers.IO) {
-        return@withContext orderDao.getTotalPrice(orderId)
+        return@withContext orderDataBase.orderDao().getTotalPrice(orderId)
     }
 
     override suspend fun removeDatabaseInfo() = withContext(Dispatchers.IO) {
         coroutineScope {
-            orderDao.deleteAllOrderItems()
-            orderDao.deleteAllOrders()
+            orderDataBase.orderDao().deleteAllOrderItems()
+            orderDataBase.orderDao().deleteAllOrders()
         }
     }
 

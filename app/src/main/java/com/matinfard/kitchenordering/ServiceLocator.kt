@@ -9,8 +9,10 @@ import com.matinfard.kitchenordering.data.local.KitchenLocalDataSource
 import com.matinfard.kitchenordering.data.local.LocalDataSource
 import com.matinfard.kitchenordering.data.local.OrderDataBase
 import com.matinfard.kitchenordering.data.remote.KitchenRemoteService
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-object ServiceLocator {
+object ServiceLocator: KoinComponent {
 
     private var database: OrderDataBase? = null
     @Volatile
@@ -31,15 +33,16 @@ object ServiceLocator {
 
     private fun createKitchenLocalDataSource(context: Context): LocalDataSource {
         val database = database ?: createDataBase(context)
-        return KitchenLocalDataSource(database.orderDao())
+        return KitchenLocalDataSource(database)
     }
 
     private fun createDataBase(context: Context): OrderDataBase {
-        val result = Room.databaseBuilder(
-            context.applicationContext,
-            OrderDataBase::class.java,
-            "order_database"
-        ).build()
+        val result : OrderDataBase by inject()
+//            Room.databaseBuilder(
+//            context.applicationContext,
+//            OrderDataBase::class.java,
+//            "order_database"
+//        ).build()
         database = result
         return result
     }

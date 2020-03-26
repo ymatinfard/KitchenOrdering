@@ -9,15 +9,19 @@ import com.matinfard.kitchenordering.data.Repository
 import com.matinfard.kitchenordering.utils.Constants
 import com.matinfard.kitchenordering.utils.SharedPrefToken
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-class SettingsViewModel(val context: Context, private val repository: Repository) : ViewModel() {
+class SettingsViewModel(private val repository: Repository) : ViewModel(), KoinComponent {
+
+    private val sharedPrefToken: SharedPrefToken by inject()
 
     private val _logoutLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
     val logout: LiveData<Boolean> = _logoutLiveData
 
     fun logout() = viewModelScope.launch {
-        val sharedProf = SharedPrefToken(context)
-        sharedProf.userToken = Constants.USER_TOKEN_DEFAULT_VAL
+//        val sharedProf = SharedPrefToken(context)
+        sharedPrefToken.userToken = Constants.USER_TOKEN_DEFAULT_VAL
         repository.removeDatabaseInfo()
         _logoutLiveData.value = Constants.LOGOUT
     }

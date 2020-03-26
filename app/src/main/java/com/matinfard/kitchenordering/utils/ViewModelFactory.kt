@@ -17,7 +17,7 @@ import com.matinfard.kitchenordering.viewmodel.ViewListSharedViewModel
  * Factory for all ViewModels.
  */
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory constructor(private val context: Context,
+class ViewModelFactory constructor(
                                    private val kitchenRepository: Repository,
                                    owner: SavedStateRegistryOwner,
                                    defaultArgs: Bundle? = null
@@ -30,13 +30,13 @@ class ViewModelFactory constructor(private val context: Context,
     ) = with(modelClass) {
         when {
             isAssignableFrom(LoginViewModel::class.java) ->
-                LoginViewModel(context, kitchenRepository)
+                LoginViewModel( kitchenRepository)
             isAssignableFrom(SettingsViewModel::class.java) ->
-                SettingsViewModel(context, kitchenRepository)
+                SettingsViewModel( kitchenRepository)
             isAssignableFrom(SplashScreenViewModel::class.java) ->
-                SplashScreenViewModel(context)
+                SplashScreenViewModel()
             isAssignableFrom(ViewListSharedViewModel::class.java) ->
-                ViewListSharedViewModel(context, kitchenRepository)
+                ViewListSharedViewModel( kitchenRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

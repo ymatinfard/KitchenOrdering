@@ -45,5 +45,6 @@ ext{
     fragmentVersion = '1.2.2'
     mockitoVersion = '3.2.4'
     androidXTestRulesVersion = '1.2.0'
+    koinVersion = '2.1.5'
 }
 

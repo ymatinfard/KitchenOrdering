@@ -1,6 +1,5 @@
 package com.matinfard.kitchenordering.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,9 @@ import com.matinfard.kitchenordering.utils.SharedPrefToken
 import com.matinfard.kitchenordering.utils.usernamePasswordSanitizer
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+
 
 
 /**
@@ -19,10 +21,10 @@ import kotlinx.coroutines.launch
  * sending them to server.
  */
 class LoginViewModel(
-    context: Context,
-    private val repository: Repository
-) :
-    ViewModel() {
+    private val repository: Repository) :
+    ViewModel(), KoinComponent {
+
+    private val sharedPrefToken : SharedPrefToken by inject()
 
     private var _isUserLoginSuccessful: MutableLiveData<Boolean> = MutableLiveData()
     val isUserLoginSuccessful: LiveData<Boolean> = _isUserLoginSuccessful
@@ -30,7 +32,6 @@ class LoginViewModel(
     private var _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
-    private var sharedPrefToken = SharedPrefToken(context)
 
     fun validateUser(username: String, password: String) {
         viewModelScope.launch {
