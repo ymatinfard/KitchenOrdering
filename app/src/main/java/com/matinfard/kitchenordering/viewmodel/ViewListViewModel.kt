@@ -1,16 +1,21 @@
 package com.matinfard.kitchenordering.viewmodel
 
-import android.content.Context
-import android.provider.Settings.Global.getString
+import android.util.Log
 import androidx.lifecycle.*
-import com.matinfard.kitchenordering.R
-import com.matinfard.kitchenordering.data.Repository
+import androidx.room.FtsOptions
+import com.matinfard.kitchenordering.exception.Failure
+import com.matinfard.kitchenordering.features.GetAllOrders
+import com.matinfard.kitchenordering.features.GetProducts
+import com.matinfard.kitchenordering.features.GetProducts.Params
+import com.matinfard.kitchenordering.features.SaveOrder
+import com.matinfard.kitchenordering.features.SaveOrderItems
+import com.matinfard.kitchenordering.interactor.UseCase
 import com.matinfard.kitchenordering.model.OrderEntity
 import com.matinfard.kitchenordering.model.OrderItemsEntity
 import com.matinfard.kitchenordering.model.Product
 import com.matinfard.kitchenordering.utils.SharedPrefToken
 import com.matinfard.kitchenordering.utils.SingleLiveEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -18,12 +23,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Shared viewmodel among "order, orderItems, viewList" fragments.
+ *
  */
-class ViewListSharedViewModel(private val repository: Repository) :
+class ViewListSharedViewModel(
+    private val getProducts: GetProducts
+    , private val saveOrder: SaveOrder
+    , private val saveOrderItems: SaveOrderItems
+) :
     ViewModel(), KoinComponent {
-
-    private val orderSavedNavigate = SingleLiveEvent<Boolean>()
 
     private val _productListLiveData = MutableLiveData<List<Product>>()
     val productList: LiveData<List<Product>> = _productListLiveData
@@ -37,45 +44,54 @@ class ViewListSharedViewModel(private val repository: Repository) :
     private var _ordersCountTmp = MutableLiveData<Int?>()
     val ordersCount: LiveData<Int?> = _ordersCountTmp
 
-    private var _orderIdLiveData = MutableLiveData<Int>()
+    private val orderSavedNavigate = SingleLiveEvent<Boolean>()
 
- //   private var sharedPrefToken = SharedPrefToken(context)
     private val sharedPrefToken: SharedPrefToken by inject()
+
     private var orderListTemp = mutableListOf<Product>()
+
     private var productListResult: List<Product>? = emptyList()
 
-    val orderItems = _orderIdLiveData.switchMap {orderId ->
-        liveData(Dispatchers.IO) {
-            emit(repository.getAllOrderItems(orderId))
-        }
-    }
-
-    val orderItemsTotalPrice = _orderIdLiveData.switchMap { orderId ->
-        liveData(Dispatchers.IO) {
-            emit(repository.getOrderItemsTotalPrice(orderId))
-        }
-    }
+//    val orderItems = _orderIdLiveData.switchMap {orderId ->
+//        liveData(Dispatchers.IO) {
+//            emit(repository.getAllOrderItems(orderId))
+//        }
+//    }
+//
+//    val orderItemsTotalPrice = _orderIdLiveData.switchMap { orderId ->
+//        liveData(Dispatchers.IO) {
+//            emit(repository.getOrderItemsTotalPrice(orderId))
+//        }
+//    }
 
     init {
-        viewModelScope.launch { getProducts() }
-    }
-
-    private suspend fun getProducts() {
-        sharedPrefToken.userToken.also { isLoading(true) }?.let { userToken ->
-            productListResult = viewModelScope.async(Dispatchers.IO) {
-                repository.getProducts(userToken)
-            }.await()
-            checkProductListAndUpdateUI(productListResult)
-        }.also { isLoading(false) }
-
-    }
-
-    private fun checkProductListAndUpdateUI(productListResult: List<Product>?) {
-        productListResult?.let {
-            _productListLiveData.value = productListResult
-        } ?: run {
-            _productListLiveData.value = emptyList()
+        viewModelScope.launch {
+            getProducts()
         }
+    }
+
+    private suspend fun getProducts() =
+        getProducts(Params("5e8c3c48-af49-425b-a6d9-f37f3511e4fa")) {
+            it.fold(::handleFailure, ::handleProductList)
+        }
+
+    private suspend fun saveOrder(order: OrderEntity){
+        saveOrder(SaveOrder.Params(order))
+    }
+
+    private suspend fun saveOrderItems(orderItems: List<OrderItemsEntity>){
+        saveOrderItems(SaveOrderItems.Params(orderItems))
+    }
+
+    private fun handleProductList(productList: List<Product>) {
+        productListResult = productList
+        _productListLiveData.value = productList
+        Log.d("Yousef", productList.toString())
+    }
+
+    private fun handleFailure(failure: Failure) {
+        Log.d("Yousef", "Error")
+        _userMessage.value = "error..."
     }
 
     private fun isLoading(status: Boolean) {
@@ -98,8 +114,8 @@ class ViewListSharedViewModel(private val repository: Repository) :
 
             viewModelScope.launch {
                 val order = createOrder()
-                repository.saveOrder(order)
-                repository.saveOrderItems(orderListTemp.map {
+                saveOrder(order)
+                saveOrderItems(orderListTemp.map {
                     OrderItemsEntity(
                         0,
                         order.orderId,
@@ -124,8 +140,6 @@ class ViewListSharedViewModel(private val repository: Repository) :
         }
     }
 
-    fun getAllOrders(): LiveData<List<OrderEntity>> = repository.getAllOrders()
-
     private fun createOrder(): OrderEntity {
         val orderId = Random().nextInt(100000 - 1000) + 1000
         val currentDate = SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(Date())
@@ -138,11 +152,6 @@ class ViewListSharedViewModel(private val repository: Repository) :
     fun navigateToOrderFragment(): SingleLiveEvent<Boolean> {
         return orderSavedNavigate
     }
-
-    fun setOrderid(orderId: Int){
-        _orderIdLiveData.value = orderId
-    }
-
 
 }
 

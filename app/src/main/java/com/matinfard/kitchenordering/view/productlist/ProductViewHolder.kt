@@ -1,7 +1,7 @@
 package com.matinfard.kitchenordering.adapter
 
 import android.view.View
-import com.matinfard.kitchenordering.model.Product
+import com.matinfard.kitchenordering.data.model.Product
 import kotlinx.android.synthetic.main.product_item_layout.view.*
 
 /**
@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.product_item_layout.view.*
  */
 
 class ProductViewHolder(val view: View): BaseViewHolder<Product>(view) {
-   override fun bind(productItemListener: KitchenListItemListener,
+   override fun bind(productItemListener: (Int) -> Unit,
                      productList: List<Product>,
                      position: Int
     ) {
@@ -26,7 +26,7 @@ class ProductViewHolder(val view: View): BaseViewHolder<Product>(view) {
         view.btn_add_to_cart.setOnClickListener {
             productList[position].selected = true
             view.img_product_selected.visibility = View.VISIBLE
-            productItemListener.onClickListItem(position)
+            productItemListener(position)
         }
     }
 }

@@ -4,18 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.matinfard.kitchenordering.R
-import com.matinfard.kitchenordering.model.OrderEntity
-import com.matinfard.kitchenordering.model.OrderItemsEntity
-import com.matinfard.kitchenordering.model.Product
+import com.matinfard.kitchenordering.data.model.OrderEntity
+import com.matinfard.kitchenordering.data.model.OrderItemsEntity
+import com.matinfard.kitchenordering.data.model.Product
 import com.matinfard.kitchenordering.utils.Constants
+import com.matinfard.kitchenordering.view.orderitems.OrderItemsViewHolder
+import com.matinfard.kitchenordering.view.orderlist.OrderViewHolder
+import com.matinfard.kitchenordering.view.productlist.ProductViewHolder
 
 /**
  * This is a base adapter for other three adapters aimed at reducing repetition
  */
-class KitchenDataAdapter(private val kitchenListItemListener: KitchenListItemListener) :
+class KitchenDataAdapter :
     RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     private var adapterDataList: List<Any> = listOf()
+
+    internal var clickListener: (Int) -> Unit = { _ -> }
 
     fun submitList(newList: List<Any>) {
         adapterDataList = newList
@@ -27,12 +32,16 @@ class KitchenDataAdapter(private val kitchenListItemListener: KitchenListItemLis
             Constants.TYPE_PRODUCT_LIST -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.product_item_layout, parent, false)
-                ProductViewHolder(view)
+                ProductViewHolder(
+                    view
+                )
             }
             Constants.TYPE_PRODUCT_ORDER_ITEMS -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.order_item_layout, parent, false)
-                return OrderItemsViewHolder(view)
+                return OrderItemsViewHolder(
+                    view
+                )
 
             }
             Constants.TYPE_PRODUCT_ORDER -> {
@@ -51,17 +60,17 @@ class KitchenDataAdapter(private val kitchenListItemListener: KitchenListItemLis
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when (holder) {
             is ProductViewHolder -> holder.bind(
-                kitchenListItemListener,
+                clickListener,
                 adapterDataList as List<Product>,
                 position
             )
             is OrderItemsViewHolder -> holder.bind(
-                kitchenListItemListener,
+                clickListener,
                 adapterDataList as List<OrderItemsEntity>,
                 position
             )
             is OrderViewHolder -> holder.bind(
-                kitchenListItemListener,
+                clickListener,
                 adapterDataList as List<OrderEntity>,
                 position
             )

@@ -1,7 +1,7 @@
 package com.matinfard.kitchenordering.adapter
 
 import android.view.View
-import com.matinfard.kitchenordering.model.OrderItemsEntity
+import com.matinfard.kitchenordering.data.model.OrderItemsEntity
 import kotlinx.android.synthetic.main.order_item_layout.view.*
 
 /**
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.order_item_layout.view.*
 class OrderItemsViewHolder(val view: View) : BaseViewHolder<OrderItemsEntity>(view) {
 
     override fun bind(
-        listItemListener: KitchenListItemListener,
+        listItemListener: (Int) -> Unit,
         list: List<OrderItemsEntity>,
         position: Int
     ) {

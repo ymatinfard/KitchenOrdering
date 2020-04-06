@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(
-        productItemListener: KitchenListItemListener,
+        productItemListener: (Int) -> Unit,
         list: List<T>,
         position: Int
     )
