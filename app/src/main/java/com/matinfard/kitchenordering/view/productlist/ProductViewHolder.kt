@@ -1,6 +1,7 @@
-package com.matinfard.kitchenordering.adapter
+package com.matinfard.kitchenordering.view.productlist
 
 import android.view.View
+import com.matinfard.kitchenordering.utils.BaseViewHolder
 import com.matinfard.kitchenordering.data.model.Product
 import kotlinx.android.synthetic.main.product_item_layout.view.*
 

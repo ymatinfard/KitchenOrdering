@@ -1,0 +1,108 @@
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+ext {
+    //Android libraries
+    appCompat_version = '1.1.0'
+    constraintLayout_version = '1.1.3'
+    androidxCore_version = '1.2.0'
+    room_version = '2.1.0-alpha06'
+    lifecycle_version = '2.2.0'
+    navigation_version = '2.2.1'
+
+    //Third party libraries
+    kotlin_coroutines_version = '1.3.2'
+    koin_version = '2.1.5'
+    retrofit_version = '2.6.0'
+    glide_version = '4.11.0'
+    gson_version = '2.8.6'
+    timber_version = '4.7.1'
+    okhttp_logging_interceptor_version = '3.8.1'
+
+    //Unit Testing
+    robolectric_version = '4.3.1'
+    junit_version = '4.12'
+    mockito_version = '3.2.4'
+    hamcrest_version = '1.3'
+    arch_testing_version = '2.0.0'
+    androidX_test_ext_version = '1.1.1'
+    androidX_test_core_version = '1.2.0'
+
+    //Acceptance Testing
+    runner_version = '1.0.2-alpha1'
+    androidX_test_rules_version = '1.2.0'
+    fragment_version = '1.2.0'
+    espresso_version = '3.2.0'
+
+    //Development
+    leakCanaryVersion = '1.5'
+
+    mainApplication = [
+            kotlin                  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            kotlinCoroutinesAndroid : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version",
+            appCompat               : "androidx.appcompat:appcompat:$appCompat_version",
+            recyclerView            : "androidx.recyclerview:recyclerview:$appCompat_version",
+            constraintLayout        : "androidx.constraintlayout:constraintlayout:$constraintLayout_version",
+            androidxCore            : "androidx.core:core-ktx:$androidxCore_version",
+            glide                   : "com.github.bumptech.glide:glide:$glide_version",
+            glideAnnotationProcessor: "com.github.bumptech.glide:compiler:$glide_version",
+            retrofit                : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            retrofitGson            : "com.squareup.retrofit2:converter-gson:$retrofit_version",
+            koinCore                : "org.koin:koin-core:$koin_version",
+            koinExt                 : "org.koin:koin-android-ext:$koin_version",
+            koinScope               : "org.koin:koin-android-scope:$koin_version",
+            koinViewmodel           : "org.koin:koin-android-viewmodel:$koin_version",
+            room                    : "androidx.room:room-runtime:$room_version",
+            roomKtx                 : "androidx.room:room-ktx:$room_version",
+            roomCompiler            : "androidx.room:room-compiler:$room_version",
+            gson                    : "com.google.code.gson:gson:$gson_version",
+            okhttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_interceptor_version",
+            navigationFragment      : "androidx.navigation:navigation-fragment:$navigation_version",
+            navigationFragmentKtx   : "androidx.navigation:navigation-fragment-ktx:$navigation_version",
+            navigationUIKtx         : "androidx.navigation:navigation-ui-ktx:$navigation_version",
+            navigationUI            : "androidx.navigation:navigation-ui:$navigation_version",
+            lifeCycleExt            : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            lifeCycleViewmodel      : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
+            lifeCycleLiveData       : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version",
+            lifecycleRuntime        : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version",
+            timber                  : "com.jakewharton.timber:timber:$timber_version",
+    ]
+
+    unitTesting = [
+            androidxCoreKtx: "androidx.test:core-ktx:$androidX_test_core_version",
+            androidxTestExt: "androidx.test.ext:junit:$androidX_test_ext_version",
+            koinTest       : "org.koin:koin-test:$koin_version",
+            archTest       : "androidx.arch.core:core-testing:$arch_testing_version",
+            robolectric    : "org.robolectric:robolectric:$robolectric_version",
+            mockito        : "org.mockito:mockito-core:$mockito_version",
+            mockitoAndroid : "org.mockito:mockito-android:$mockito_version",
+            hamcrest       : "org.hamcrest:hamcrest-all:$hamcrest_version",
+            junit          : "junit:junit:$junit_version",
+    ]
+
+    acceptanceTesting = [
+            coreKtx              : "androidx.test:core-ktx:$androidX_test_core_version",
+            testRule             : "androidx.test:rules:$androidX_test_rules_version",
+            roomTest             : "androidx.room:room-testing:$room_version",
+            arcCoreTesting       : "androidx.arch.core:core-testing:$arch_testing_version",
+            expressoCore         : "androidx.test.espresso:espresso-core:$espresso_version",
+            robolectricAnnotation: "org.robolectric:annotations:$robolectric_version",
+            fragmentTest         : "androidx.fragment:fragment-testing:$fragment_version",
+            androidxTestExt      : "androidx.test.ext:junit:$androidX_test_ext_version",
+            junit                : "junit:junit:$junit_version",
+            koinTest             : "org.koin:koin-test:$koin_version",
+            mockito              : "org.mockito:mockito-core:$mockito_version",
+            mockitoAndroid       : "org.mockito:mockito-android:$mockito_version",
+            robolectric          : "org.robolectric:annotations:$robolectric_version",
+            idlingResource       : "androidx.test.espresso:espresso-idling-resource:$espresso_version",
+    ]
+
+    development = [
+            leakCanary    : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
+            leakCanaryNoop: "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+    ]
+}

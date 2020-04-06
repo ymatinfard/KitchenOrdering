@@ -2,8 +2,8 @@ package com.matinfard.kitchenordering.data.source
 
 import androidx.lifecycle.LiveData
 import com.matinfard.kitchenordering.data.local.LocalDataSource
-import com.matinfard.kitchenordering.model.OrderEntity
-import com.matinfard.kitchenordering.model.OrderItemsEntity
+import com.matinfard.kitchenordering.data.model.OrderEntity
+import com.matinfard.kitchenordering.data.model.OrderItemsEntity
 
 class FakeLocalDataSource: LocalDataSource {
     private val orderItem1 = OrderItemsEntity(1, 12345, "2222-3333-4444-5555-6666", "item test 1", 1000, "www.placeholder.io")
@@ -14,7 +14,7 @@ class FakeLocalDataSource: LocalDataSource {
         return orderItemsTest
     }
 
-    override fun getAllOrders(): LiveData<List<OrderEntity>> {
+    override fun getAllOrders(): List<OrderEntity> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
      }
 

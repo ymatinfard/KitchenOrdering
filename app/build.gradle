@@ -7,28 +7,31 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "29.0.2"
+    def config = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion config["compile_sdk"]
+    buildToolsVersion '28.0.3'
+
     defaultConfig {
-        applicationId "com.matinfard.kitchenrdering"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId config["application_id"]
+        minSdkVersion config["min_sdk"]
+        targetSdkVersion config["target_sdk"]
+        versionCode config["version_code"]
+        versionName config["version_name"]
+        testInstrumentationRunner config["test_runner"]
     }
 
-    android {
-        sourceSets {
-            String sharedTestDir = 'src/sharedTest/java'
-            test {
-                java.srcDirs += sharedTestDir
-            }
-            androidTest {
-                java.srcDirs += sharedTestDir
-            }
-        }
-    }
+//    android {
+//        sourceSets {
+//            String sharedTestDir = 'src/sharedTest/java'
+//            test {
+//                java.srcDirs += sharedTestDir
+//            }
+//            androidTest {
+//                java.srcDirs += sharedTestDir
+//            }
+//        }
+//    }
 
     buildTypes {
         debug {
@@ -63,84 +66,78 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.navigation:navigation-fragment:2.2.1'
-    implementation 'androidx.navigation:navigation-ui:2.2.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
+    def applicationDependencies = rootProject.ext.mainApplication
+    def unitTestDependencies = rootProject.ext.unitTesting
+    def acceptanceTestDependencies = rootProject.ext.acceptanceTesting
+    def developmentDependencies = rootProject.ext.development
+
+    //Compile time dependencies
+    kapt applicationDependencies.roomCompiler
+
+
+    //Application dependencies
+    implementation applicationDependencies.kotlin
+    implementation applicationDependencies.kotlinCoroutinesAndroid
+    implementation applicationDependencies.appCompat
+    implementation applicationDependencies.recyclerView
+    implementation applicationDependencies.constraintLayout
+    implementation applicationDependencies.androidxCore
+    implementation applicationDependencies.glide
+    implementation applicationDependencies.retrofit
+    implementation applicationDependencies.retrofitGson
+    implementation applicationDependencies.koinCore
+    implementation applicationDependencies.koinExt
+    implementation applicationDependencies.koinScope
+    implementation applicationDependencies.koinViewmodel
+    implementation applicationDependencies.room
+    implementation applicationDependencies.roomKtx
+    implementation applicationDependencies.okhttpLoggingInterceptor
+    implementation applicationDependencies.navigationFragment
+    implementation applicationDependencies.navigationFragmentKtx
+    implementation applicationDependencies.navigationUIKtx
+    implementation applicationDependencies.navigationUI
+    implementation applicationDependencies.lifeCycleExt
+    implementation applicationDependencies.lifeCycleViewmodel
+    implementation applicationDependencies.lifeCycleLiveData
+    implementation applicationDependencies.lifecycleRuntime
+    implementation applicationDependencies.timber
+    kapt  applicationDependencies.glideAnnotationProcessor
+
+
+    //Unit/Integration tests dependencies
+    testImplementation unitTestDependencies.androidxCoreKtx
+    testImplementation unitTestDependencies.androidxTestExt
+    testImplementation unitTestDependencies.archTest
+    testImplementation unitTestDependencies.robolectric
+    testImplementation unitTestDependencies.mockito
+    testImplementation unitTestDependencies.mockitoAndroid
+    testImplementation unitTestDependencies.hamcrest
+    testImplementation unitTestDependencies.junit
+    testImplementation unitTestDependencies.koinTest
+
+
+    //Acceptance tests dependencies
+    androidTestImplementation acceptanceTestDependencies.roomTest
+    androidTestImplementation acceptanceTestDependencies.arcCoreTesting
+    androidTestImplementation acceptanceTestDependencies.expressoCore
+    androidTestImplementation acceptanceTestDependencies.robolectricAnnotation
+    androidTestImplementation acceptanceTestDependencies.idlingResource
+    androidTestImplementation acceptanceTestDependencies.androidxTestExt
+    androidTestImplementation acceptanceTestDependencies.koinTest
+    androidTestImplementation acceptanceTestDependencies.mockito
+    androidTestImplementation acceptanceTestDependencies.mockitoAndroid
+    androidTestImplementation acceptanceTestDependencies.robolectric
+
+    debugImplementation acceptanceTestDependencies.coreKtx
+    debugImplementation acceptanceTestDependencies.testRule
+    debugImplementation acceptanceTestDependencies.fragmentTest
 
 
 
-    //Timber
-    implementation "com.jakewharton.timber:timber:$timberVersion"
 
-    //Lifecycle
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-
-    //Gson
-    implementation "com.google.code.gson:gson:$gsonVersion"
-
-    //Retrofit Gson
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitGsonVersion"
-
-    //Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-
-    //fragment
-    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
-
-    // Coroutines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinVersion"
-
-    //Picasso
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
-
-    // Room components
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-
-    // Dependencies for local unit tests
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
-    testImplementation  "androidx.arch.core:core-testing:$archTestingVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    testImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
-
-    // AndroidX Test - JVM testing
-    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
-    testImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
-
-    // AndroidX Test - Instrumented testing
-    androidTestImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
-    androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
-    androidTestImplementation "androidx.test:rules:$androidXTestRulesVersion"
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
-    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinVersion"
-    androidTestImplementation "org.robolectric:annotations:$robolectricVersion"
-    debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
-    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
-
-    // Mockito
-    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
-    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-
-    // Koin for Kotlin
-    implementation "org.koin:koin-core:$koinVersion"
-    implementation "org.koin:koin-android-ext:$koinVersion"
-    implementation "org.koin:koin-android-scope:$koinVersion"
-    implementation "org.koin:koin-android-viewmodel:$koinVersion"
+    //Development dependencies
+    debugImplementation developmentDependencies.leakCanary
+    releaseImplementation developmentDependencies.leakCanaryNoop
+    testImplementation developmentDependencies.leakCanaryNoop
 
 }

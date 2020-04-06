@@ -1,4 +1,4 @@
-package com.matinfard.kitchenordering.view.order
+package com.matinfard.kitchenordering.view.login
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matinfard.kitchenordering.exception.Failure
-import com.matinfard.kitchenordering.view.login.GetUserToken
-import com.matinfard.kitchenordering.model.UserToken
+import com.matinfard.kitchenordering.data.model.UserToken
 import com.matinfard.kitchenordering.utils.SharedPrefToken
 import com.matinfard.kitchenordering.utils.SingleLiveEvent
 import com.matinfard.kitchenordering.utils.usernamePasswordSanitizer
@@ -25,8 +24,8 @@ class LoginViewModel(
     private val sharedPrefToken: SharedPrefToken
 ) : ViewModel(), KoinComponent {
 
-    val _success = SingleLiveEvent<Any>()
-    val success: LiveData<Any>
+    private val _success = SingleLiveEvent<Boolean>()
+    val success: LiveData<Boolean>
         get() = _success
 
     private var _loading: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -54,7 +53,7 @@ class LoginViewModel(
     private fun handleUserToken(userToken: UserToken) {
         userToken.token?.let { token ->
             sharedPrefToken.userToken = token
-            _success.call()
+            _success.call(true)
         } ?: run {
             handleFailure(Failure.InvalidData)
         }
